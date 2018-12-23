@@ -40,6 +40,10 @@ def simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, stim_t
 
         for j in range(num_nodes):
             pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)]) - pops[j, i] * beta)
+            # Need to accound for delay mat and not use fixed delay
+            # Can use the code below
+            # pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delayMat[:,j]/tStep)]) - pops[j, i] * beta)
+
 
 
     if plot:

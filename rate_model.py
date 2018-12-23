@@ -34,6 +34,9 @@ def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep):
             t_relative = (t - 15.0)
             pops[3, i] = pops[3, i] + 0.1*t_relative*np.exp(-t_relative/0.2)
 
+        # This is replaced by a one-line for loop
+        # Also applicable for any size
+        # See rate_model_arbitrary_size
         pops[0, i+1] = pops[0, i] + tStep * (np.sum(AdjMat[:,0]*pops[:,i -int(delay/tStep)]) - pops[0, i] * beta)
         pops[1, i+1] = pops[1, i] + tStep * (np.sum(AdjMat[:,1]*pops[:,i- int(delay/tStep)]) - pops[1, i] * beta)
         pops[2, i+1] = pops[2, i] + tStep * (np.sum(AdjMat[:,2]*pops[:,i- int(delay/tStep)]) - pops[2, i] * beta)
