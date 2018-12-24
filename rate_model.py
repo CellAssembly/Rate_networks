@@ -71,45 +71,47 @@ plt.colorbar()
 simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep)
 ################################################################
 
-# combined_CCGamp = np.load('combined_CCGamp_2layer.npy')
-# labels_CCGamp   = np.load('combined_CCGamp_2layer_labels.npy')
-# combined_CCGamp = np.transpose(combined_CCGamp) #transpose so source is rows and target is columns
-#
-# plt.figure()
-# plt.imshow(combined_CCGamp, interpolation='none')
-# plt.xticks(range(len(labels_CCGamp)), list(labels_CCGamp), rotation = 90.0)
-# plt.yticks(range(len(labels_CCGamp)), list(labels_CCGamp))
-# plt.colorbar()
-#
-# print labels_CCGamp
-#
-#
-# v1D_index = np.where(labels_CCGamp == 'V1-d')[0][0]
-# v1S_index = np.where(labels_CCGamp == 'V1-s')[0][0]
-#
-# hvaD_index = np.where(labels_CCGamp == 'AM-d')[0][0]
-# hvaS_index = np.where(labels_CCGamp == 'AM-s')[0][0]
-#
-# # Note that the deep had lower numbers than the superficial which is why there is a +1 for V1S and hvaS
-# a = combined_CCGamp[v1D_index:v1S_index + 1, v1D_index:v1S_index + 1]
-# b = combined_CCGamp[v1D_index:v1S_index + 1, hvaD_index:hvaS_index + 1]
-# c = combined_CCGamp[hvaD_index:hvaS_index + 1, v1D_index:v1S_index + 1]
-# d = combined_CCGamp[hvaD_index:hvaS_index + 1, hvaD_index:hvaS_index + 1]
-#
-# ### Will use transpose and flips to flip the matrix along the diagonals to have the superficial first and then
-# ### the deep. Run the code below with temp to see the effect.
-# #temp = np.array([[1,2], [3,4]])
-# # np.transpose(np.transpose(temp[::-1])[::-1])
-# a = np.transpose(np.transpose(a[::-1])[::-1])
-# b = np.transpose(np.transpose(b[::-1])[::-1])
-# c = np.transpose(np.transpose(c[::-1])[::-1])
-# d = np.transpose(np.transpose(d[::-1])[::-1])
-#
-#
-# matrix_subset = np.concatenate([np.concatenate([a,c]), np.concatenate([b,d])], axis = 1)*100000
-# matrix_subset = (scalar/np.max(matrix_subset)) * matrix_subset
-# np.fill_diagonal(matrix_subset, 0)
-# simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep)
+
+
+combined_CCGamp = np.load('combined_CCGamp_2layer.npy')
+labels_CCGamp   = np.load('combined_CCGamp_2layer_labels.npy')
+combined_CCGamp = np.transpose(combined_CCGamp) #transpose so source is rows and target is columns
+
+plt.figure()
+plt.imshow(combined_CCGamp, interpolation='none')
+plt.xticks(range(len(labels_CCGamp)), list(labels_CCGamp), rotation = 90.0)
+plt.yticks(range(len(labels_CCGamp)), list(labels_CCGamp))
+plt.colorbar()
+
+print labels_CCGamp
+
+
+v1D_index = np.where(labels_CCGamp == 'V1-d')[0][0]
+v1S_index = np.where(labels_CCGamp == 'V1-s')[0][0]
+
+hvaD_index = np.where(labels_CCGamp == 'AM-d')[0][0]
+hvaS_index = np.where(labels_CCGamp == 'AM-s')[0][0]
+
+# Note that the deep had lower numbers than the superficial which is why there is a +1 for V1S and hvaS
+a = combined_CCGamp[v1D_index:v1S_index + 1, v1D_index:v1S_index + 1]
+b = combined_CCGamp[v1D_index:v1S_index + 1, hvaD_index:hvaS_index + 1]
+c = combined_CCGamp[hvaD_index:hvaS_index + 1, v1D_index:v1S_index + 1]
+d = combined_CCGamp[hvaD_index:hvaS_index + 1, hvaD_index:hvaS_index + 1]
+
+### Will use transpose and flips to flip the matrix along the diagonals to have the superficial first and then
+### the deep. Run the code below with temp to see the effect.
+#temp = np.array([[1,2], [3,4]])
+# np.transpose(np.transpose(temp[::-1])[::-1])
+a = np.transpose(np.transpose(a[::-1])[::-1])
+b = np.transpose(np.transpose(b[::-1])[::-1])
+c = np.transpose(np.transpose(c[::-1])[::-1])
+d = np.transpose(np.transpose(d[::-1])[::-1])
+
+
+matrix_subset = np.concatenate([np.concatenate([a,c]), np.concatenate([b,d])], axis = 1)*100000
+matrix_subset = (scalar/np.max(matrix_subset)) * matrix_subset
+np.fill_diagonal(matrix_subset, 0)
+simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep)
 
 
 plt.show()
