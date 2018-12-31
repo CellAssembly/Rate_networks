@@ -11,6 +11,13 @@ params = {'legend.fontsize': 30,
 pylab.rcParams.update(params)
 
 
+#simulate_rate_model(AdjMat,
+#                   delayMat,
+#                   num_nodes,
+#                   tStart, tEnd, tStep,
+#                   stim_times = ((5.0, 7.0), (15.0, 17.0)),
+#                   stim_node = 0,
+#                   labels = [], plot = True):
 
 def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep):
 
