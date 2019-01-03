@@ -15,17 +15,17 @@ pylab.rcParams.update(params)
 def simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, stim_times = ((5.0, 7.0), (15.0, 17.0)), stim_node = 0, labels = [], plot = True):
     '''
 
-    :param AdjMat:
-    :param delayMat:
-    :param num_nodes:
-    :param tStart:
-    :param tEnd:
-    :param tStep:
-    :param stim_times:
-    :param stim_node:
-    :param labels:
-    :param plot:
-    :return:
+    :param AdjMat: Input adjaceny matrix calculated from experimental data
+    :param delayMat: Time delay between different regions
+    :param num_nodes: Size of adjacency matrix also
+    :param tStart: start time
+    :param tEnd: end time
+    :param tStep: timestep
+    :param stim_times: Time when an input pulse is given to stim_node
+    :param stim_node: Node that gets stimulated by a pulse
+    :param labels: Labels for plotting
+    :param plot: Flag to determine whether or not to plot time traces
+    :return: Response trace of every population due to input perturbation
     '''
     AdjMat[delayMat < 0] = 0
     delayMat[delayMat < 0] = 0
