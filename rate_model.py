@@ -19,55 +19,63 @@ pylab.rcParams.update(params)
 #                   stim_node = 0,
 #                   labels = [], plot = True):
 
-def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep):
+def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep, stim_node = 0, area = 'HVA'):
 
-    delay = 0.5
+    delay = 1.
     time = np.arange(tStart, tEnd, tStep)
     numSteps = len(time)
-    beta = 4.0
+    num_nodes = len(AdjMat)
+    beta = num_nodes/2
+    K_s = 0.5
 
 
-    pops = np.zeros((4,numSteps))
+    pops = np.zeros((num_nodes, numSteps))
 
     for i, t in enumerate(time):
         if i == numSteps - 1:
             break
 
-        if t >= 5.0 and t <=7.0:
-            t_relative = (t - 5.0)
-            pops[0, i] =  pops[0, i] + 0.1*t_relative*np.exp(-t_relative/0.2)
+        if t >= 2.0 and t <=4.:
+            t_relative = (t - 2.0)
+            pops[stim_node, i] =  pops[stim_node, i] + 0.1*t_relative*np.exp(-t_relative/0.1)
 
-        if t >= 15.0 and t <=17.0:
+        if t >= 15.0 and t <=17.:
             t_relative = (t - 15.0)
-            pops[3, i] = pops[3, i] + 0.1*t_relative*np.exp(-t_relative/0.2)
+            pops[3, i] = pops[3, i] + 0.1*t_relative*np.exp(-t_relative/0.1)
 
 
-        pops[0, i+1] = pops[0, i] + tStep * (np.sum(AdjMat[:,0]*pops[:,i -int(delay/tStep)]) - pops[0, i] * beta)
-        pops[1, i+1] = pops[1, i] + tStep * (np.sum(AdjMat[:,1]*pops[:,i- int(delay/tStep)]) - pops[1, i] * beta)
-        pops[2, i+1] = pops[2, i] + tStep * (np.sum(AdjMat[:,2]*pops[:,i- int(delay/tStep)]) - pops[2, i] * beta)
-        pops[3, i+1] = pops[3, i] + tStep * (np.sum(AdjMat[:,3]*pops[:,i- int(delay/tStep)]) - pops[3, i] * beta)
+        # pops[0, i+1] = pops[0, i] + tStep * (np.sum(AdjMat[:,0]*pops[:,i -int(delay/tStep)]) - pops[0, i] * beta)
+        # pops[1, i+1] = pops[1, i] + tStep * (np.sum(AdjMat[:,1]*pops[:,i- int(delay/tStep)]) - pops[1, i] * beta)
+        # pops[2, i+1] = pops[2, i] + tStep * (np.sum(AdjMat[:,2]*pops[:,i- int(delay/tStep)]) - pops[2, i] * beta)
+        # pops[3, i+1] = pops[3, i] + tStep * (np.sum(AdjMat[:,3]*pops[:,i- int(delay/tStep)]) - pops[3, i] * beta)
         # One line for loop replacement
         # From rate_model_arbitrary_size
-        # for j in range(num_nodes):
-        #     pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)]) - pops[j, i] * beta)
+        for j in range(len(AdjMat)):
+            # No normalization - regular leak
+            pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)]) - pops[j, i] * beta)
+
+            # Normalization (Divisive) - Ohshiro et. al, Nat. Neuro 2011
+            # pops[j, i+1] = pops[j, i] + tStep * ((np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)])))/(1 + np.sum(pops[j, i-int(delay/tStep)]))# - pops[j, i] * beta)
+            # pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)])/(1 + np.sum(pops[j, i-int(delay/tStep)])) - pops[j, i] * beta)
+
 
 
     plt.figure(figsize=(20,20))
     plt.plot(time, pops[0, :], 'r', lw = 3, label='V1-s')
     plt.plot(time, pops[1, :], 'forestgreen', lw = 3, label = 'V1-d')
-    plt.plot(time, pops[2, :], 'darkorchid', lw = 3, label = 'HVA-s')
-    plt.plot(time, pops[3, :], 'goldenrod', lw = 3, label = 'HVA-d')
-    plt.xlabel('Time (unitless)')
-    plt.ylabel('Rate (unitless)')
+    plt.plot(time, pops[2, :], 'darkorchid', lw = 3, label = area + '-s')
+    plt.plot(time, pops[3, :], 'goldenrod', lw = 3, label = area + '-d')
+    plt.xlabel('Time (arb. u.)')
+    plt.ylabel('Relative Rate (arb. u.)')
     plt.legend()
 
 
 tStart = 0
 tStep  = 0.001
-tEnd   = 25.0
+tEnd   = 10.0
 
-scalar = 3.0
-AdjMat = np.ones((4,4)) * 0.5
+scalar = 1.0
+AdjMat = np.ones((4,4)) * 0.25
 AdjMat[0, 1] += scalar
 AdjMat[1, 2] += scalar
 AdjMat[2, 3] += scalar
@@ -82,9 +90,9 @@ simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep)
 
 
 
-combined_CCGamp = np.load('combined_CCGamp_2layer.npy')
-labels_CCGamp   = np.load('combined_CCGamp_2layer_labels.npy')
-combined_CCGamp = np.transpose(combined_CCGamp) #transpose so source is rows and target is columns
+combined_CCGamp = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std.npy')
+labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_labels.npy')
+combined_CCGamp = np.transpose(combined_CCGamp[0,:,:]) #transpose so source is rows and target is columns
 
 plt.figure()
 plt.imshow(combined_CCGamp, interpolation='none')
@@ -98,8 +106,9 @@ print labels_CCGamp
 v1D_index = np.where(labels_CCGamp == 'V1-d')[0][0]
 v1S_index = np.where(labels_CCGamp == 'V1-s')[0][0]
 
-hvaD_index = np.where(labels_CCGamp == 'AM-d')[0][0]
-hvaS_index = np.where(labels_CCGamp == 'AM-s')[0][0]
+area = 'LM'
+hvaD_index = np.where(labels_CCGamp == area + '-d')[0][0]
+hvaS_index = np.where(labels_CCGamp == area + '-s')[0][0]
 
 # Note that the deep had lower numbers than the superficial which is why there is a +1 for V1S and hvaS
 a = combined_CCGamp[v1D_index:v1S_index + 1, v1D_index:v1S_index + 1]
@@ -117,12 +126,25 @@ c = np.transpose(np.transpose(c[::-1])[::-1])
 d = np.transpose(np.transpose(d[::-1])[::-1])
 
 
-matrix_subset = np.concatenate([np.concatenate([a,c]), np.concatenate([b,d])], axis = 1)*100000
-matrix_subset = (scalar/np.max(matrix_subset)) * matrix_subset
+matrix_subset = np.concatenate([np.concatenate([a,c]), np.concatenate([b,d])], axis = 1)
 np.fill_diagonal(matrix_subset, 0)
-simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep)
+matrix_subset = (scalar/np.max(matrix_subset)) * matrix_subset
 
 
+plt.figure()
+plt.imshow(matrix_subset, interpolation='none')
+plt.colorbar()
+simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep, area = area)
+# simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep, stim_node=3)
+
+plt.tight_layout()
+plt.savefig("adjacency_matrix/area_" + area + ".png")
 plt.show()
 
+#### Plot Alpha Function ####
+plt.figure()
+x = np.arange(0,5,0.001)
+y = 0.5*x*np.exp(-x/0.5)
+plt.plot(x,y, lw = 10.0, color = 'royalblue')
+plt.show()
 
