@@ -136,8 +136,18 @@ combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer
 labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer_5std_labels.npy')
 # combined_CCGamp_all = np.load('first_7mice_combined_CCG_3layer_6std.npy')
 # labels_CCGamp   = np.load('first_7mice_combined_CCG_3layer_6std_labels.npy')
-combined_CCGamp = combined_CCGamp_all[0,:,:] / np.max(combined_CCGamp_all[0,:,:])
+
+###### Remove PM and RL ######
+labels_CCGamp = np.delete(labels_CCGamp, [3,4,5,15,16,17])
+combined_CCGamp = combined_CCGamp_all[0,:,:]
+combined_CCGamp = np.delete(combined_CCGamp, [3,4,5,15,16,17], 0)
+combined_CCGamp = np.delete(combined_CCGamp, [3,4,5,15,16,17], 1)
+##############################
+
+combined_CCGamp = combined_CCGamp / np.max(combined_CCGamp)
 combined_CCGamp = np.transpose(combined_CCGamp) #transpose so source is rows and target is columns
+np.fill_diagonal(combined_CCGamp, 0)
+
 delayMat = combined_CCGamp_all[1] / 1000.       # To convert to seconds
 delayMat = np.transpose(delayMat)
 
@@ -158,12 +168,12 @@ tStart = 0
 tStep  = 0.001
 tEnd   = 12.0
 
-for stim_node in np.arange(7, 8, 1):
+num_nodes = len(labels_CCGamp)
+for stim_node in np.arange(0, num_nodes, 1):
     print "Stimulation input pulse at: ", labels_CCGamp[stim_node]
 
     rates_intact = simulate_rate_model(combined_CCGamp, delayMat, num_nodes, tStart, tEnd, tStep, stim_times=((5.0, 7.0), (None, None)), stim_node=stim_node, labels = labels_CCGamp)
     # plt.savefig("Stim_node_V1m_regularNormalization.png")
-    num_nodes = len(labels_CCGamp)
     ModulationInds = np.zeros((num_nodes, num_nodes))
 
     for i in range(num_nodes):
