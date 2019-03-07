@@ -138,7 +138,7 @@ simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep, area = area)
 # simulate_4node_rate_model(matrix_subset, tStart, tEnd, tStep, stim_node=3)
 
 plt.tight_layout()
-plt.savefig("adjacency_matrix/area_" + area + ".png")
+plt.savefig("adjacency_matrix/area_" + area + ".pdf", format = 'pdf', dpi = 1000)
 plt.show()
 
 #### Plot Alpha Function ####
