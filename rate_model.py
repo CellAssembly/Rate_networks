@@ -43,11 +43,6 @@ def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep, stim_node = 0, area =
             t_relative = (t - 15.0)
             pops[3, i] = pops[3, i] + 0.1*t_relative*np.exp(-t_relative/0.1)
 
-
-        # pops[0, i+1] = pops[0, i] + tStep * (np.sum(AdjMat[:,0]*pops[:,i -int(delay/tStep)]) - pops[0, i] * beta)
-        # pops[1, i+1] = pops[1, i] + tStep * (np.sum(AdjMat[:,1]*pops[:,i- int(delay/tStep)]) - pops[1, i] * beta)
-        # pops[2, i+1] = pops[2, i] + tStep * (np.sum(AdjMat[:,2]*pops[:,i- int(delay/tStep)]) - pops[2, i] * beta)
-        # pops[3, i+1] = pops[3, i] + tStep * (np.sum(AdjMat[:,3]*pops[:,i- int(delay/tStep)]) - pops[3, i] * beta)
         # One line for loop replacement
         # From rate_model_arbitrary_size
         for j in range(len(AdjMat)):
@@ -57,6 +52,9 @@ def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep, stim_node = 0, area =
             # Normalization (Divisive) - Ohshiro et. al, Nat. Neuro 2011
             # pops[j, i+1] = pops[j, i] + tStep * ((np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)])))/(1 + np.sum(pops[j, i-int(delay/tStep)]))# - pops[j, i] * beta)
             # pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)])/(1 + np.sum(pops[j, i-int(delay/tStep)])) - pops[j, i] * beta)
+
+            # Consider linear divisive normalization (March 2nd Cosyne poster)
+            #Ri = ... divide by (1 + w*sum(Rj))
 
 
 

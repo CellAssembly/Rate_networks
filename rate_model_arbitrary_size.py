@@ -100,7 +100,7 @@ def simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, stim_t
         plt.ylabel('Rate (arb. u.)')
         plt.legend()
 
-    min_amplitude = 0.0007585100825505153 #np.min(np.max(pops, axis = 1))  #0.005052069650848851 (cluster 2), 0.0007585100825505153 (cluster 3)
+    min_amplitude = np.min(np.max(pops, axis = 1))  #0.005052069650848851 (cluster 2), 0.0007585100825505153 (cluster 3)
     response_time = np.zeros(num_nodes)
     for i in range(num_nodes):
         try:
@@ -109,7 +109,7 @@ def simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, stim_t
             response_time[i] = 0.0
     print min_amplitude
     # return (np.sum(pops, axis=1), (np.argmax(pops, axis = 1)*tStep - stim_times[0][0]))
-    np.save('psth_cluster3.npy', pops)
+    # np.save('psth_cluster3.npy', pops)
     return (np.sum(pops, axis=1), response_time*tStep - stim_times[0][0])
 
 
