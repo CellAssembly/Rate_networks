@@ -54,7 +54,8 @@ def simulate_4node_rate_model(AdjMat, tStart, tEnd, tStep, stim_node = 0, area =
             # pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[:,i -int(delay/tStep)])/(1 + np.sum(pops[j, i-int(delay/tStep)])) - pops[j, i] * beta)
 
             # Consider linear divisive normalization (March 2nd Cosyne poster)
-            #Ri = ... divide by (1 + w*sum(Rj))
+            # Ri = ... divide by (1 + w*sum(Rj))
+            # pops[j, i+1] = pops[j, i] + tStep *
 
 
 
