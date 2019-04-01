@@ -86,6 +86,10 @@ def simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, stim_t
             # For accounting for delay mat and not use fixed delay
             # pops[j, i+1] = pops[j, i] + tStep * (np.sum(AdjMat[:,j]*pops[range(num_nodes),i -(delayMat[:,j]/tStep).astype(int)]) - pops[j, i] * beta)
 
+            # Consider linear divisive normalization (March 2nd Cosyne poster)
+            # Ri = ... divide by (1 + w*sum(Rj))
+            # pops[j, i+1] = pops[j, i] + tStep *
+
 
 
     if plot:
@@ -193,7 +197,9 @@ for stim_node in np.arange(5, 6, 1):
     rates_intact, ttp_intact = simulate_rate_model(combined_CCGamp, delayMat, num_nodes, tStart, tEnd, tStep, stim_times=((5.0, 7.0), (None, None)), stim_node=stim_node, labels = labels_CCGamp, plot = True)
     plt.figure(figsize = (8, 6))
     # temp_labels = np.delete(labels_CCGamp, stim_node)
-    # ttp_intact = np.delete(ttp_intact, stim_node)
+    # ttp_intact = np.delete(t# Consider linear divisive normalization (March 2nd Cosyne poster)
+            # Ri = ... divide by (1 + w*sum(Rj))
+            # pops[j, i+1] = pops[j, i] + tStep *tp_intact, stim_node)
     # 3-layer
     # plotting_order = np.array([12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
     # label_order = np.array([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 0, 1, 2, 3, 4, 5])
