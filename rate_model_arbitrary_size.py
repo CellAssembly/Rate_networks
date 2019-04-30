@@ -146,16 +146,16 @@ simulate_rate_model(AdjMat, delayMat, num_nodes, tStart, tEnd, tStep, include_de
 ################################################################
 
 
-# combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer_5std.npy')
-# labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer_5std_labels.npy')
-# combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std.npy')
-# labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_labels.npy')
+combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer_5std.npy')
+labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_3layer_5std_labels.npy')
+combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std.npy')
+labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_labels.npy')
 
-# combined_CCGamp_all = np.load('first_7mice_combined_CCG_3layer_6std.npy')
-# labels_CCGamp   = np.load('first_7mice_combined_CCG_3layer_6std_labels.npy')
+combined_CCGamp_all = np.load('first_7mice_combined_CCG_3layer_6std.npy')
+labels_CCGamp   = np.load('first_7mice_combined_CCG_3layer_6std_labels.npy')
 
-# combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_2cluster.npy')
-# labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_2cluster_labels.npy')
+combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_2cluster.npy')
+labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_2cluster_labels.npy')
 combined_CCGamp_all = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_3cluster.npy')
 labels_CCGamp   = np.load('adjacency_matrix/first_10mice_combined_CCG_2layer_5std_3cluster_labels.npy')
 combined_CCGamp = combined_CCGamp_all[0,:,:]
