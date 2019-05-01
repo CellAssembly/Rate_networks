@@ -141,9 +141,9 @@ plt.savefig("adjacency_matrix/area_" + area + ".pdf", format = 'pdf', dpi = 1000
 plt.show()
 
 #### Plot Alpha Function ####
-plt.figure()
-x = np.arange(0,5,0.001)
-y = 0.5*x*np.exp(-x/0.5)
-plt.plot(x,y, lw = 10.0, color = 'royalblue')
-plt.show()
+# plt.figure()
+# x = np.arange(0,5,0.001)
+# y = 0.5*x*np.exp(-x/0.5)
+# plt.plot(x,y, lw = 10.0, color = 'royalblue')
+# plt.show()
 
