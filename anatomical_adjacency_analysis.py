@@ -92,6 +92,13 @@ RL6B = np.where(AdjMat.index == 'VISrl6b')[0][0]
 
 Vis_AdjMat = np.zeros((12,12))
 Area_order = ['V1s', 'V1d', 'LMs', 'LMd', 'ALs', 'ALd', 'RLs', 'RLd', 'PMs', 'PMd','AMs', 'AMd']
+Area_volumes = np.array([4.29, 2.79, 0.67, 0.56, 0.42, 0.34, 0.59, 0.42, 0.58, 0.47, 0.40, 0.39])
+All_volumes  = np.array([1.26343,1.99904,1.02364,1.552688,1.070864,0.164472,0.185148,0.301588,0.179084,
+                        0.314522,0.207042,0.03824,0.117892,0.199314,0.104152,0.202942,0.111674,
+                        0.02225,0.17074,0.27639,0.146294,0.244294,0.151428,0.028518,0.19065,0.292206,
+                        0.098818,0.28712,0.151974,0.027996,0.136038,0.206952,0.059858,0.227464,
+                        0.13862,0.023626])
+
 V1_s_inds = np.arange(V1_L1, V1_L4 + 1)
 V1_d_inds = np.arange(V1_L5, V1_L6B + 1)
 
@@ -115,90 +122,102 @@ AdjMat = np.array(AdjMat)
 
 #For getting a partricular element, e.g. V1_L4,V1_L4, need AdjMat[V1_L4, V1_L4 - 1]
 
-Vis_AdjMat[0,:] = np.array([np.nan,                                                        np.sum((AdjMat[V1_L1:V1_L4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[V1_L1:V1_L4 + 1, LM1 - 1: LM4]).astype(float)), np.sum((AdjMat[V1_L1:V1_L4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[V1_L1:V1_L4 + 1, AL1 - 1: AL4]).astype(float)), np.sum((AdjMat[V1_L1:V1_L4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[V1_L1:V1_L4 + 1, RL1 - 1: RL4]).astype(float)), np.sum((AdjMat[V1_L1:V1_L4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[V1_L1:V1_L4 + 1, PM1 - 1: PM4]).astype(float)), np.sum((AdjMat[V1_L1:V1_L4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[V1_L1:V1_L4 + 1, AM1 - 1: AM4]).astype(float)), np.sum((AdjMat[V1_L1:V1_L4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[0:3]
+Vis_AdjMat[0,:] = np.array([np.nan,                                                                              np.sum(((AdjMat[V1_L1:V1_L4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L1:V1_L4 + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L1:V1_L4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L1:V1_L4 + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L1:V1_L4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L1:V1_L4 + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L1:V1_L4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L1:V1_L4 + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L1:V1_L4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L1:V1_L4 + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L1:V1_L4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[1,:] = np.array([np.sum((AdjMat[V1_L5:V1_L6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.nan,
-                            np.sum((AdjMat[V1_L5:V1_L6B + 1, LM1 - 1: LM4]).astype(float)), np.sum((AdjMat[V1_L5:V1_L6B + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[V1_L5:V1_L6B + 1, AL1 - 1: AL4]).astype(float)), np.sum((AdjMat[V1_L5:V1_L6B + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[V1_L5:V1_L6B + 1, RL1 - 1: RL4]).astype(float)), np.sum((AdjMat[V1_L5:V1_L6B + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[V1_L5:V1_L6B + 1, PM1 - 1: PM4]).astype(float)), np.sum((AdjMat[V1_L5:V1_L6B + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[V1_L5:V1_L6B + 1, AM1 - 1: AM4]).astype(float)), np.sum((AdjMat[V1_L5:V1_L6B + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[3:6]
+Vis_AdjMat[1,:] = np.array([np.sum(((AdjMat[V1_L5:V1_L6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.nan,
+                            np.sum(((AdjMat[V1_L5:V1_L6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L5:V1_L6B + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L5:V1_L6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L5:V1_L6B + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L5:V1_L6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L5:V1_L6B + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L5:V1_L6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L5:V1_L6B + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[V1_L5:V1_L6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[V1_L5:V1_L6B + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[2,:] = np.array([np.sum((AdjMat[LM1:LM4 + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[LM1:LM4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.nan,                                                        np.sum((AdjMat[LM1:LM4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[LM1:LM4 + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[LM1:LM4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[LM1:LM4 + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[LM1:LM4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[LM1:LM4 + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[LM1:LM4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[LM1:LM4 + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[LM1:LM4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[6:9]
+Vis_AdjMat[2,:] = np.array([np.sum(((AdjMat[LM1:LM4 + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[LM1:LM4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.nan,                                                                              np.sum(((AdjMat[LM1:LM4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM1:LM4 + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM1:LM4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM1:LM4 + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM1:LM4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM1:LM4 + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM1:LM4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM1:LM4 + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM1:LM4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[3,:] = np.array([np.sum((AdjMat[LM5:LM6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[LM5:LM6B + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[LM5:LM6B + 1, LM1 - 1: LM4]).astype(float)),     np.nan,
-                            np.sum((AdjMat[LM5:LM6B + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[LM5:LM6B + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[LM5:LM6B + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[LM5:LM6B + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[LM5:LM6B + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[LM5:LM6B + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[LM5:LM6B + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[LM5:LM6B + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[9:12]
+Vis_AdjMat[3,:] = np.array([np.sum(((AdjMat[LM5:LM6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[LM5:LM6B + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM5:LM6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.nan,
+                            np.sum(((AdjMat[LM5:LM6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM5:LM6B + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM5:LM6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM5:LM6B + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM5:LM6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM5:LM6B + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[LM5:LM6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[LM5:LM6B + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[4,:] = np.array([np.sum((AdjMat[AL1:AL4 + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[AL1:AL4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[AL1:AL4 + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[AL1:AL4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.nan,                                                        np.sum((AdjMat[AL1:AL4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[AL1:AL4 + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[AL1:AL4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[AL1:AL4 + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[AL1:AL4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[AL1:AL4 + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[AL1:AL4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[12:15]
+Vis_AdjMat[4,:] = np.array([np.sum(((AdjMat[AL1:AL4 + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[AL1:AL4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL1:AL4 + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL1:AL4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.nan,                                                                             np.sum(((AdjMat[AL1:AL4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL1:AL4 + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL1:AL4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL1:AL4 + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL1:AL4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL1:AL4 + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL1:AL4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[5,:] = np.array([np.sum((AdjMat[AL5:AL6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[AL5:AL6B + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[AL5:AL6B + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[AL5:AL6B + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[AL5:AL6B + 1, AL1 - 1: AL4]).astype(float)),     np.nan,
-                            np.sum((AdjMat[AL5:AL6B + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[AL5:AL6B + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[AL5:AL6B + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[AL5:AL6B + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[AL5:AL6B + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[AL5:AL6B + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[15:18]
+Vis_AdjMat[5,:] = np.array([np.sum(((AdjMat[AL5:AL6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[AL5:AL6B + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL5:AL6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL5:AL6B + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL5:AL6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.nan,
+                            np.sum(((AdjMat[AL5:AL6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL5:AL6B + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL5:AL6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL5:AL6B + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AL5:AL6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AL5:AL6B + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[6,:] = np.array([np.sum((AdjMat[RL1:RL4 + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[RL1:RL4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[RL1:RL4 + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[RL1:RL4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[RL1:RL4 + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[RL1:RL4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.nan,                                                        np.sum((AdjMat[RL1:RL4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[RL1:RL4 + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[RL1:RL4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[RL1:RL4 + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[RL1:RL4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[18:21]
+Vis_AdjMat[6,:] = np.array([np.sum(((AdjMat[RL1:RL4 + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[RL1:RL4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL1:RL4 + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL1:RL4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL1:RL4 + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL1:RL4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.nan,                                                                             np.sum(((AdjMat[RL1:RL4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL1:RL4 + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL1:RL4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL1:RL4 + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL1:RL4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
 
-Vis_AdjMat[7,:] = np.array([np.sum((AdjMat[RL5:RL6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[RL5:RL6B + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[RL5:RL6B + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[RL5:RL6B + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[RL5:RL6B + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[RL5:RL6B + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[RL5:RL6B + 1, RL1 - 1: RL4]).astype(float)),     np.nan,
-                            np.sum((AdjMat[RL5:RL6B + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[RL5:RL6B + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[RL5:RL6B + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[RL5:RL6B + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[21:24]
+Vis_AdjMat[7,:] = np.array([np.sum(((AdjMat[RL5:RL6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[RL5:RL6B + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL5:RL6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL5:RL6B + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL5:RL6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL5:RL6B + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL5:RL6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.nan,
+                            np.sum(((AdjMat[RL5:RL6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL5:RL6B + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[RL5:RL6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[RL5:RL6B + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[8,:] = np.array([np.sum((AdjMat[PM1:PM4 + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[PM1:PM4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[PM1:PM4 + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[PM1:PM4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[PM1:PM4 + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[PM1:PM4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[PM1:PM4 + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[PM1:PM4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.nan,                                                        np.sum((AdjMat[PM1:PM4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[PM1:PM4 + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[PM1:PM4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[24:27]
+Vis_AdjMat[8,:] = np.array([np.sum(((AdjMat[PM1:PM4 + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[PM1:PM4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM1:PM4 + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM1:PM4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM1:PM4 + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM1:PM4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM1:PM4 + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM1:PM4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.nan,                                                                              np.sum(((AdjMat[PM1:PM4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM1:PM4 + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM1:PM4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[9,:] = np.array([np.sum((AdjMat[PM5:PM6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[PM5:PM6B + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[PM5:PM6B + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[PM5:PM6B + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[PM5:PM6B + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[PM5:PM6B + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[PM5:PM6B + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[PM5:PM6B + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[PM5:PM6B + 1, PM1 - 1: PM4]).astype(float)),     np.nan,
-                            np.sum((AdjMat[PM5:PM6B + 1, AM1 - 1: AM4]).astype(float)),     np.sum((AdjMat[PM5:PM6B + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[27:30]
+Vis_AdjMat[9,:] = np.array([np.sum(((AdjMat[PM5:PM6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[PM5:PM6B + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM5:PM6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM5:PM6B + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM5:PM6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM5:PM6B + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM5:PM6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM5:PM6B + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[PM5:PM6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.nan,
+                            np.sum(((AdjMat[PM5:PM6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[PM5:PM6B + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[10,:] = np.array([np.sum((AdjMat[AM1:AM4 + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[AM1:AM4 + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[AM1:AM4 + 1, LM1 - 1: LM4]).astype(float)),      np.sum((AdjMat[AM1:AM4 + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[AM1:AM4 + 1, AL1 - 1: AL4]).astype(float)),      np.sum((AdjMat[AM1:AM4 + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[AM1:AM4 + 1, RL1 - 1: RL4]).astype(float)),      np.sum((AdjMat[AM1:AM4 + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[AM1:AM4 + 1, PM1 - 1: PM4]).astype(float)),      np.sum((AdjMat[AM1:AM4 + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.nan,                                                         np.sum((AdjMat[AM1:AM4 + 1, AM5 - 1: AM6B]).astype(float))])
+volume_factor = All_volumes[30:33]
+Vis_AdjMat[10,:] = np.array([np.sum(((AdjMat[AM1:AM4 + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[AM1:AM4 + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM1:AM4 + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),      np.sum(((AdjMat[AM1:AM4 + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM1:AM4 + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),      np.sum(((AdjMat[AM1:AM4 + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM1:AM4 + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),      np.sum(((AdjMat[AM1:AM4 + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM1:AM4 + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),      np.sum(((AdjMat[AM1:AM4 + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.nan,                                                                               np.sum(((AdjMat[AM1:AM4 + 1, AM5 - 1: AM6B]).astype(float).T * volume_factor).T)])
 
-Vis_AdjMat[11,:] = np.array([np.sum((AdjMat[AM5:AM6B + 1, V1_L1 - 1: V1_L4]).astype(float)), np.sum((AdjMat[AM5:AM6B + 1, V1_L5 - 1: V1_L6B]).astype(float)),
-                            np.sum((AdjMat[AM5:AM6B + 1, LM1 - 1: LM4]).astype(float)),     np.sum((AdjMat[AM5:AM6B + 1, LM5 - 1: LM6B]).astype(float)),
-                            np.sum((AdjMat[AM5:AM6B + 1, AL1 - 1: AL4]).astype(float)),     np.sum((AdjMat[AM5:AM6B + 1, AL5 - 1: AL6B]).astype(float)),
-                            np.sum((AdjMat[AM5:AM6B + 1, RL1 - 1: RL4]).astype(float)),     np.sum((AdjMat[AM5:AM6B + 1, RL5 - 1: RL6B]).astype(float)),
-                            np.sum((AdjMat[AM5:AM6B + 1, PM1 - 1: PM4]).astype(float)),     np.sum((AdjMat[AM5:AM6B + 1, PM5 - 1: PM6B]).astype(float)),
-                            np.sum((AdjMat[AM5:AM6B + 1, AM1 - 1: AM4]).astype(float)),     np.nan])
+volume_factor = All_volumes[33:36]
+Vis_AdjMat[11,:] = np.array([np.sum(((AdjMat[AM5:AM6B + 1, V1_L1 - 1: V1_L4]).astype(float).T * volume_factor).T), np.sum(((AdjMat[AM5:AM6B + 1, V1_L5 - 1: V1_L6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM5:AM6B + 1, LM1 - 1: LM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AM5:AM6B + 1, LM5 - 1: LM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM5:AM6B + 1, AL1 - 1: AL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AM5:AM6B + 1, AL5 - 1: AL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM5:AM6B + 1, RL1 - 1: RL4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AM5:AM6B + 1, RL5 - 1: RL6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM5:AM6B + 1, PM1 - 1: PM4]).astype(float).T * volume_factor).T),     np.sum(((AdjMat[AM5:AM6B + 1, PM5 - 1: PM6B]).astype(float).T * volume_factor).T),
+                            np.sum(((AdjMat[AM5:AM6B + 1, AM1 - 1: AM4]).astype(float).T * volume_factor).T),     np.nan])
 
 
 Vis_AdjMat[0:2, 0:2] = np.nan
@@ -208,7 +227,11 @@ Vis_AdjMat[6:8, 6:8] = np.nan
 Vis_AdjMat[8:10, 8:10] = np.nan
 Vis_AdjMat[10:12, 10:12] = np.nan
 
-# Normalize by roe
+
+# Multiply by volume of areas
+# Vis_AdjMat = (Vis_AdjMat.T * Area_volumes).T
+#
+# Normalize by row
 # row_max = np.nanmax(Vis_AdjMat, axis=1)
 # Vis_AdjMat = Vis_AdjMat / row_max[:, np.newaxis]
 
