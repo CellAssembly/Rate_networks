@@ -30,7 +30,7 @@ color_list = ['#E3CF57', 'green', 'purple', 'blue', 'brown', 'red']
 
 fig = plt.figure(figsize=(16,8))
 plt.subplot(1,2,1)
-plt.imshow(AdjMat[2:8][:,2:8], cmap = 'magma')
+plt.imshow(AdjMat[2:8][:,2:8], cmap = 'magma', interpolation='none')
 plt.xticks(np.arange(len(inds)), areas[2:8])
 plt.yticks(np.arange(len(inds)), areas[2:8])
 plt.xlabel('Target')
@@ -241,7 +241,7 @@ ratio = in_degrees/out_degrees
 
 fig = plt.figure(figsize=(16,8))
 plt.subplot(1,2,1)
-plt.imshow(Vis_AdjMat, cmap = 'magma')
+plt.imshow(Vis_AdjMat, cmap = 'magma', interpolation='none')
 plt.xticks(np.arange(len(Area_order)), Area_order, rotation =90)
 plt.yticks(np.arange(len(Area_order)), Area_order)
 plt.xlabel('Target')
