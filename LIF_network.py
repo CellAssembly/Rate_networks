@@ -4,37 +4,37 @@ from matplotlib.pyplot import plot as plt
 # Make it feedforwad
 
 # Below is MATLAB code that needs to be converted
-function rast = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd)
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Simulation time parameters
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    tStart = 0;
+def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000):
+    '''
+    :param weightsEE:
+    :param weightsEI:
+    :param weightsIE:
+    :param weightsII:
+    :param tEnd: length of simulation (in millisecond)
+    :return: spike times and neuron numbers
+    '''
 
-    if nargin < 5
-        %Simulation in milli-seconds; default is 1 second <> 1000ms
-        tEnd = 1000;  %4000
-    end
+    ################################################################################
+    # Simulation time parameters
+    ################################################################################
+    tStart = 0
+    tStep = 0.1
 
-    %0.1 millisecond time step
-    tStep = 0.1;
-
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Setting Parameters For Neuron Number
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    %Number of excitatory neurons in the network
+    ################################################################################
+    # Setting Parameters For Neuron Number
+    ################################################################################
+    #Number of excitatory neurons in the network
     EneuronNum    = size(weightsEE,1);
-    %Number of inhibitory neurons in the network
+    #Number of inhibitory neurons in the network
     IneuronNum    = size(weightsII,1);
-    %Total number of neurons
+    #Total number of neurons
     neuronNum = EneuronNum + IneuronNum;
 
 
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Parameters for the LIF neurons
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+    ################################################################################
+    # Parameters for the LIF neurons
+    ################################################################################
     Vthres = 1;      %Threshold voltage for both exc and inh neurons
     Vreset = 0;      %Reset voltage for both exc and inh neurons
 
@@ -46,70 +46,69 @@ function rast = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,
     Itm = 10;        %Membrane Time Constant
     Itr = 5;       %Refractory period
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% Solving Network with LIF neurons
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %time constant for excitatory to excitatory synapses
+    ################################################################################
+    ## Solving Network with LIF neurons
+    ################################################################################
+    #time constant for excitatory to excitatory synapses
     t_EE = 3;
-    %time constant for excitatory to inhibitory synapses
+    #time constant for excitatory to inhibitory synapses
     t_IE = 3;
-    %time constant for inhibitory to excitatory synapses
+    #time constant for inhibitory to excitatory synapses
     t_EI = 2;
     t_II = 2;
 
-    %conductance for excitatory to excitatory synapses
-    gEE = zeros(1,EneuronNum);
-    %conductance for excitatory to inhibitory synapses
-    gIE = zeros(1,IneuronNum);
-    %conductance for inhibitory to excitatory synapses
-    gEI = zeros(1,EneuronNum);
-    %conductance for inhibitory to inhibitory synapses
-    gII = zeros(1,IneuronNum);
+    #conductance for excitatory to excitatory synapses
+    gEE = np.zeros(1,EneuronNum);
+    #conductance for excitatory to inhibitory synapses
+    gIE = np.zeros(1,IneuronNum);
+    #conductance for inhibitory to excitatory synapses
+    gEI = np.zeros(1,EneuronNum);
+    #conductance for inhibitory to inhibitory synapses
+    gII = np.zeros(1,IneuronNum);
 
     gBE = 1.1 + .1*rand(1,EneuronNum);
     gBI = 1 + .05* rand(1,IneuronNum);
 
-    %Matrix storing spike times for raster plots
+    #Matrix storing spike times for raster plots
     rast = zeros(neuronNum,(tEnd - tStart)/tStep + 1);
-    % rast = sparse(neuronNum,(tEnd - tStart)/tStep + 1);
 
-    %last action potential for refractor period calculation (just big number)
+    #last action potential for refractor period calculation (just big number)
     lastAP  = -50 * ones(1,neuronNum);
 
-    %inital membrane voltage is random
+    #inital membrane voltage is random
     memVol = rand(neuronNum,(tEnd - tStart)/tStep + 1);
 
-    % rng(292892)
+    # np.random.seed(292892)
 
-    for i =2:(tEnd - tStart)/tStep
-        for j = 1:neuronNum
+    for i  in range(0, (tEnd - tStart)/tStep):
+        for j in range (neuronNum):
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %CONNCECTIVITY CALCULATIONS
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            ####################################
+            #CONNCECTIVITY CALCULATIONS
+            #################################
 
-            if (j <= EneuronNum)
+            if (j <= EneuronNum):
                 gEE(j) = gEE(j) - gEE(j)*tStep/t_EE;
                 gEI(j) = gEI(j) - gEI(j)*tStep/t_EI;
-            else
+            else:
                 gIE(j-EneuronNum) = gIE(j-EneuronNum) - gIE(j-EneuronNum)*tStep/t_IE;
                 gII(j-EneuronNum) = gII(j-EneuronNum) - gII(j-EneuronNum)*tStep/t_II;
-            end
 
-            %If excitatory neuron fired
-            if (rast(j,i-1) ~= 0 && j <= EneuronNum)
+
+            #If excitatory neuron fired
+            if (rast(j,i-1) ~= 0 && j <= EneuronNum):
                 gEE = gEE + weightsEE(:,j)';
                 gIE = gIE + weightsIE(:,j)';
-            end
 
-            if (rast(j,i-1) ~= 0 && j > EneuronNum)
+
+            if (rast(j,i-1) ~= 0 && j > EneuronNum):
                 gEI = gEI + weightsEI(:,j-EneuronNum)';
                 gII = gII + weightsII(:,j-EneuronNum)';
-            end
 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            %EXCITATORY NEURONS
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+            #################################
+            #EXCITATORY NEURONS
+            #################################
 
             if(j <= EneuronNum)
 

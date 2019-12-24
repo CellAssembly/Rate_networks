@@ -1,104 +1,81 @@
 ### SECOND MATLAB script to convert
-function[weightsEE, weightsEI, weightsIE, weightsII] = create_EI_topology(EneuronNum, numClusters, PARAMS)
+#function[weightsEE, weightsEI, weightsIE, weightsII] = create_EI_topology(EneuronNum, numClusters, PARAMS)
+def create_FF_topology (neuronNum, numClusters, PARAMS_DICTRIONARY = None):
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% WEIGHT
-MATRIX
-HERE
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-if nargin < 1
-    EneuronNum = 800;
+    EneuronNum = 0.8 * neuronNum
+    IneuronNum = 0.2 * neuronNum
+
+    if PARAMS_DICTRIONARY == None:
+        PARAMS_DICTRIONARY = {}
+        PARAMS_DICTRIONARY['factorEI'] = 3
+        PARAMS_DICTRIONARY['factorIE'] = 3
+        PARAMS_DICTRIONARY['pfactorEI'] = 1.8
+        PARAMS_DICTRIONARY['pfactorIE'] = 1.8
+
+        PARAMS_DICTRIONARY['wEI'] = 0.042
+        PARAMS_DICTRIONARY['pEI'] = .5
+
+        PARAMS_DICTRIONARY['wIE'] = 0.0105
+        PARAMS_DICTRIONARY['pIE'] = .5
+
+        PARAMS_DICTRIONARY['wEE'] = 0.022
+        PARAMS_DICTRIONARY['pEE'] = .2
+
+        PARAMS_DICTRIONARY['wII'] = 0.042
+        PARAMS_DICTRIONARY['pII'] = .5
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CREATE WEIGHT MATRIX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+WRatio  = 1.0;               %Ratio of Win/Wout (synaptic weight of within group to neurons outside of the group)
+REE = 3.5;                   %Ratio of pin/pout (probability of connection withing group to outside the group)
+
+%If run_sim_loop original file being excuted, it will have a Ratio
+%parameter and the value is updated according the current value of Ratio.
+%It is upto the user of this code to change the line inside the if
+%condition to REE or WRatio depending on which case they are studying
+if exist('Ratio')
+    REE = Ratio;
 end
-IneuronNum = round(.25 * EneuronNum);
 
-if nargin < 2
-    numClusters = 10;
-end
+f = 1/sqrt(mult);          %Factor to scale by synaptic weight parameters by network size
 
-if nargin < 3
-    PARAMS.factorEI = 3;
-PARAMS.factorIE = 3;
-PARAMS.pfactorEI = 1.8; % 2.5;
-PARAMS.pfactorIE = 1.8; % 2.5;
+wEI     = f*.042;          %Average weight of inhibitroy to excitatory cells
+wIE     = f*0.0105;        %Average weight of excitatory to inhibitory cells
+wEE     = f*.022;          %Average weight of excitatory to excitatory cells
+wII     = f*0.042;         %Average weight of inhibitory to inhibitory cells
 
-PARAMS.wEI = 0.042; % .015
-PARAMS.pEI = .5;
 
-PARAMS.wIE = 0.0105; % .015
-PARAMS.pIE = .5;
 
-PARAMS.wEE = 0.022; % .015
-PARAMS.pEE = .2;
+wEEsub = wEE/(1/numClusters+(1-1/numClusters)/WRatio);          %Average weight for sub-clusters
+wEE    = wEEsub/WRatio;
 
-PARAMS.wII = 0.042; % .057
-PARAMS.pII = .5;
+p1  = 0.2/(1/numClusters+(1-1/numClusters)/REE);                %Average probability for sub-clusters
+pEE = p1/REE;
 
-end
+weightsEI = random('binom',1,0.5,[EneuronNum,IneuronNum]);      %Weight matrix of inhibioty to excitatory LIF cells
+weightsEI = wEI.* weightsEI;
 
-% calculation
-of
-adjusted
-weights
-for EI
-    wEIsub = PARAMS.wEI / (1 / numClusters + (1 - 1 / numClusters) * PARAMS.factorEI);
-PARAMS.wEI = wEIsub * PARAMS.factorEI;
-pEIsub = PARAMS.pEI / (1 / numClusters + (1 - 1 / numClusters) * PARAMS.pfactorEI);
-PARAMS.pEI = pEIsub * PARAMS.pfactorEI;
+weightsIE = random('binom',1,0.5,[IneuronNum, EneuronNum]);     %Weight matrix of excitatory to inhibitory cells
+weightsIE = wIE.* weightsIE;
 
-% calculation
-of
-adjusted
-weights
-for IE
-    wIEsub = PARAMS.wIE / (1 / numClusters + (1 - 1 / numClusters) / PARAMS.factorIE);
-PARAMS.wIE = wIEsub / PARAMS.factorIE;
-pIEsub = PARAMS.pIE / (1 / numClusters + (1 - 1 / numClusters) / PARAMS.pfactorIE);
-PARAMS.pIE = pIEsub / PARAMS.pfactorIE;
+weightsII = random('binom',1,0.5,[IneuronNum, IneuronNum]);     %Weight matrix of inhibitory to inhibitory cells
+weightsII = wII.* weightsII;
 
-% Weight
-matrix
-of
-inhibitory
-to
-excitatory
-LIF
-units
-weightsEI = random('binom', 1, PARAMS.pEI, [EneuronNum, IneuronNum]);
-weightsEI = PARAMS.wEI. * weightsEI;
+weightsEE = random('binom',1,pEE,[EneuronNum, EneuronNum]);     %Weight matrix of excitatory to excitatory cells
+weightsEE = wEE.* weightsEE;
 
-% Weight
-matrix
-of
-excitatory
-to
-inhibitory
-cells
-weightsIE = random('binom', 1, PARAMS.pIE, [IneuronNum, EneuronNum]);
-weightsIE = PARAMS.wIE. * weightsIE;
 
-weightsII = random('binom', 1, PARAMS.pII, [IneuronNum, IneuronNum]);
-weightsII = PARAMS.wII. * weightsII;
-
-weightsEE = random('binom', 1, PARAMS.pEE, [EneuronNum, EneuronNum]);
-weightsEE = PARAMS.wEE. * weightsEE;
-
+%Create the group weight matrices and update the total weight matrix
 for i = 1:numClusters
-weightsIEsub = random('binom', 1, pIEsub, [IneuronNum / numClusters, EneuronNum / numClusters]);
-weightsIEsub = wIEsub. * weightsIEsub;
-kk = (i - 1) * IneuronNum / numClusters + 1:i * IneuronNum / numClusters;
-jj = (i - 1) * EneuronNum / numClusters + 1:i * EneuronNum / numClusters;
-weightsIE(kk, jj) = weightsIEsub;
+    weightsEEsub = random('binom',1,p1,[EneuronNum/numClusters, EneuronNum/numClusters]);
+    weightsEEsub = wEEsub.* weightsEEsub;
+    weightsEE((i-1)*EneuronNum/numClusters+1:i*EneuronNum/numClusters,(i-1)*EneuronNum/numClusters+1:i*EneuronNum/numClusters) = weightsEEsub;
 end
 
-for i = 1:numClusters
-weightsEIsub = random('binom', 1, pEIsub, [EneuronNum / numClusters, IneuronNum / numClusters]);
-weightsEIsub = wEIsub. * weightsEIsub;
-kk = (i - 1) * IneuronNum / numClusters + 1:i * IneuronNum / numClusters;
-jj = (i - 1) * EneuronNum / numClusters + 1:i * EneuronNum / numClusters;
-weightsEI(jj, kk) = weightsEIsub;
-end
-weightsEI = circshift(weightsEI, [0 - IneuronNum / numClusters]);
-
-weightsEE = weightsEE - diag(diag(weightsEE));
+%Ensure the diagonals are zero
 weightsII = weightsII - diag(diag(weightsII));
-end
+weightsEE = weightsEE - diag(diag(weightsEE));
