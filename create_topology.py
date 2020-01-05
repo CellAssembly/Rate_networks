@@ -1,29 +1,29 @@
 import numpy as np
 ### SECOND MATLAB script to convert
 #function[weightsEE, weightsEI, weightsIE, weightsII] = create_EI_topology(EneuronNum, numClusters, PARAMS)
-def create_FF_topology (neuronNum, numClusters, PARAMS_DICTRIONARY = None):
-
-    EneuronNum = 0.8 * neuronNum
-    IneuronNum = 0.2 * neuronNum
-
-    if PARAMS_DICTRIONARY == None:
-        PARAMS_DICTRIONARY = {}
-        PARAMS_DICTRIONARY['factorEI'] = 3
-        PARAMS_DICTRIONARY['factorIE'] = 3
-        PARAMS_DICTRIONARY['pfactorEI'] = 1.8
-        PARAMS_DICTRIONARY['pfactorIE'] = 1.8
-
-        PARAMS_DICTRIONARY['wEI'] = 0.042
-        PARAMS_DICTRIONARY['pEI'] = .5
-
-        PARAMS_DICTRIONARY['wIE'] = 0.0105
-        PARAMS_DICTRIONARY['pIE'] = .5
-
-        PARAMS_DICTRIONARY['wEE'] = 0.022
-        PARAMS_DICTRIONARY['pEE'] = .2
-
-        PARAMS_DICTRIONARY['wII'] = 0.042
-        PARAMS_DICTRIONARY['pII'] = .5
+# def create_FF_topology (neuronNum, numClusters, PARAMS_DICTRIONARY = None):
+#
+#     EneuronNum = 0.8 * neuronNum
+#     IneuronNum = 0.2 * neuronNum
+#
+#     if PARAMS_DICTRIONARY == None:
+#         PARAMS_DICTRIONARY = {}
+#         PARAMS_DICTRIONARY['factorEI'] = 3
+#         PARAMS_DICTRIONARY['factorIE'] = 3
+#         PARAMS_DICTRIONARY['pfactorEI'] = 1.8
+#         PARAMS_DICTRIONARY['pfactorIE'] = 1.8
+# 
+#         PARAMS_DICTRIONARY['wEI'] = 0.042
+#         PARAMS_DICTRIONARY['pEI'] = .5
+#
+#         PARAMS_DICTRIONARY['wIE'] = 0.0105
+#         PARAMS_DICTRIONARY['pIE'] = .5
+#
+#         PARAMS_DICTRIONARY['wEE'] = 0.022
+#         PARAMS_DICTRIONARY['pEE'] = .2
+#
+#         PARAMS_DICTRIONARY['wII'] = 0.042
+#         PARAMS_DICTRIONARY['pII'] = .5
 
 
 
