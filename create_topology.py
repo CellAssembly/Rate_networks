@@ -1,4 +1,5 @@
 import numpy as np
+from matplotlib import pyplot as plt
 ### SECOND MATLAB script to convert
 #function[weightsEE, weightsEI, weightsIE, weightsII] = create_EI_topology(EneuronNum, numClusters, PARAMS)
 # def create_FF_topology (neuronNum, numClusters, PARAMS_DICTRIONARY = None):
@@ -37,7 +38,7 @@ IneuronNum = 0.2 * neuronNum
 
 WRatio  = 1.0               #Ratio of Win/Wout (synaptic weight of within group to neurons outside of the group)
 REE = 3.5                   #Ratio of pin/pout (probability of connection withing group to outside the group)
-numClusters = 6
+numClusters = 4
 
 mult = 1
 f = 1/np.sqrt(mult)       #Factor to scale by synaptic weight parameters by network size
@@ -55,26 +56,30 @@ wEE    = wEEsub/WRatio;
 p1  = 0.2/(1/numClusters+(1-1/numClusters)/REE);                #Average probability for sub-clusters
 pEE = p1/REE;
 
-weightsEI = np.random('binom',1,0.5,[EneuronNum,IneuronNum]);      #Weight matrix of inhibioty to excitatory LIF cells
-weightsEI = wEI.* weightsEI;
+weightsEI = np.random.binomial(1, 0.5, (EneuronNum,IneuronNum));      #Weight matrix of inhibioty to excitatory LIF cells
+weightsEI = wEI* weightsEI;
 
-weightsIE = np.random('binom',1,0.5,[IneuronNum, EneuronNum]);     #Weight matrix of excitatory to inhibitory cells
-weightsIE = wIE.* weightsIE;
+weightsIE = np.random.binomial(1,0.5,(IneuronNum, EneuronNum));     #Weight matrix of excitatory to inhibitory cells
+weightsIE = wIE* weightsIE;
 
-weightsII = np.random('binom',1,0.5,[IneuronNum, IneuronNum]);     #Weight matrix of inhibitory to inhibitory cells
-weightsII = wII.* weightsII;
+weightsII = np.random.binomial(1,0.5,(IneuronNum, IneuronNum));     #Weight matrix of inhibitory to inhibitory cells
+weightsII = wII* weightsII;
 
-weightsEE = np.random('binom',1,pEE,[EneuronNum, EneuronNum]);     #Weight matrix of excitatory to excitatory cells
-weightsEE = wEE.* weightsEE;
+weightsEE = np.random.binomial(1,pEE,(EneuronNum, EneuronNum));     #Weight matrix of excitatory to excitatory cells
+weightsEE = wEE* weightsEE;
 
 
 #Create the group weight matrices and update the total weight matrix
 for i in range (numClusters):
-    weightsEEsub = random('binom',1,p1,[EneuronNum/numClusters, EneuronNum/numClusters]);
-    weightsEEsub = wEEsub.* weightsEEsub;
-    weightsEE((i-1)*EneuronNum/numClusters+1:i*EneuronNum/numClusters,(i-1)*EneuronNum/numClusters+1:i*EneuronNum/numClusters) = weightsEEsub;
+    weightsEEsub = np.random.binomial(1,p1,[EneuronNum/numClusters, EneuronNum/numClusters]);
+    weightsEEsub = wEEsub* weightsEEsub
+    weightsEE[i*EneuronNum/numClusters:(i+1)*EneuronNum/numClusters,i*EneuronNum/numClusters:(i+1)*EneuronNum/numClusters] = weightsEEsub
 
 
 #Ensure the diagonals are zero
-weightsII = weightsII - np.diag(np.diag(weightsII));
-weightsEE = weightsEE - np.diag(np.diag(weightsEE));
+weightsII = weightsII - np.diag(np.diag(weightsII))
+weightsEE = weightsEE - np.diag(np.diag(weightsEE))
+
+# Plotting to check
+plt.imshow(weightsEE)
+plt.show()
