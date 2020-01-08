@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib.pyplot import plot as plt
+from create_topology import  create_matrices
 # Create LIF network
 # Make it feedforwad
 
@@ -76,18 +77,18 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
     lastAP  = -50 * np.ones(neuronNum);
 
     #inital membrane voltage is random
-    memVol = np.random.random(neuronNum,(tEnd - tStart)/tStep + 1);
+    memVol = np.random.random((neuronNum,(tEnd - tStart)/tStep + 1))
 
     # np.random.seed(292892)
 
-    for i  in range(0, (tEnd - tStart)/tStep):
+    for i  in range(0, int((tEnd - tStart)/tStep)):
         for j in range (neuronNum):
 
             ####################################
             #CONNCECTIVITY CALCULATIONS
             #################################
 
-            if (j <= EneuronNum):
+            if (j < EneuronNum):
                 gEE[j] = gEE[j] - gEE[j]*tStep/t_EE
                 gEI[j] = gEI[j] - gEI[j]*tStep/t_EI
             else:
@@ -96,12 +97,12 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
 
 
             #If excitatory neuron fired
-            if (rast[j,i-1] != 0 and j <= EneuronNum):
+            if (rast[j,i-1] != 0 and j < EneuronNum):
                 gEE = gEE + weightsEE[:,j].T
                 gIE = gIE + weightsIE[:,j].T
 
 
-            if (rast[j,i-1] != 0 and j > EneuronNum):
+            if (rast[j,i-1] != 0 and j >= EneuronNum):
                 gEI = gEI + weightsEI[:,j-EneuronNum].T
                 gII = gII + weightsII[:,j-EneuronNum].T
 
@@ -110,7 +111,7 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
             #EXCITATORY NEURONS
             #################################
 
-            if(j <= EneuronNum):
+            if(j < EneuronNum):
 
                 gE= gEE[j]
                 gI= gEI[j]
@@ -138,7 +139,7 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
             #INHIBITORY NEURONS
             #################################
 
-            if (j > EneuronNum):
+            if (j >= EneuronNum):
                 gE = gIE[j - EneuronNum]
                 gI = gII[j - EneuronNum]
 
@@ -158,3 +159,9 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
 
 
                 memVol[j,i] = v;
+
+
+if __name__ == "__main__":
+    weightsEE, weightsEI, weightsIE, weightsII = create_matrices()
+    simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
+    print "done"
