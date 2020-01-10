@@ -1,5 +1,5 @@
 import numpy as np
-from matplotlib.pyplot import plot as plt
+from matplotlib import pyplot as plt
 from create_topology import  create_matrices
 # Create LIF network
 # Make it feedforwad
@@ -74,12 +74,14 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
     rast = np.zeros((neuronNum,(tEnd - tStart)/tStep + 1))
 
     #last action potential for refractor period calculation (just big number)
-    lastAP  = -50 * np.ones(neuronNum);
+    lastAP  = -50 * np.ones(neuronNum)
 
     #inital membrane voltage is random
     memVol = np.random.random((neuronNum,(tEnd - tStart)/tStep + 1))
 
     # np.random.seed(292892)
+    gids = []
+    spikes = []
 
     for i  in range(0, int((tEnd - tStart)/tStep)):
         for j in range (neuronNum):
@@ -156,12 +158,16 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
                     v = Vthres
                     lastAP[j] = i
                     rast[j,i] = j
+                    gids.append(j)
+                    spikes.append(i)
 
 
-                memVol[j,i] = v;
+                memVol[j,i] = v
+    # plt.imshow(rast)
+    return gids, spikes
 
 
 if __name__ == "__main__":
     weightsEE, weightsEI, weightsIE, weightsII = create_matrices()
-    simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
+    gids, spikes = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
     print "done"
