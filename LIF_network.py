@@ -81,7 +81,7 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
 
     # np.random.seed(292892)
     gids = []
-    spikes = []
+    spike_times = []
 
     for i  in range(0, int((tEnd - tStart)/tStep)):
         for j in range (neuronNum):
@@ -131,6 +131,8 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
                     v = Vthres
                     lastAP[j] = i
                     rast[j,i] = j
+                    gids.append(j)
+                    spike_times.append(i)
 
 
                 memVol[j,i] = v
@@ -159,15 +161,17 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
                     lastAP[j] = i
                     rast[j,i] = j
                     gids.append(j)
-                    spikes.append(i)
+                    spike_times.append(i)
 
 
                 memVol[j,i] = v
     # plt.imshow(rast)
-    return gids, spikes
+    return gids, spike_times
 
 
 if __name__ == "__main__":
     weightsEE, weightsEI, weightsIE, weightsII = create_matrices()
-    gids, spikes = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
+    gids, spike_times = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
+    plt.scatter(spike_times, gids)
+    plt.show()
     print "done"

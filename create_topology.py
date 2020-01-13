@@ -7,7 +7,7 @@ def create_matrices():
     # CREATE WEIGHT MATRIX
     ###############################################################################
 
-    neuronNum = 1000
+    neuronNum = 500
     EneuronNum = 0.8 * neuronNum
     IneuronNum = 0.2 * neuronNum
 
@@ -20,7 +20,7 @@ def create_matrices():
 
     wEI     = f*.042          #Average weight of inhibitroy to excitatory cells
     wIE     = f*0.0105        #Average weight of excitatory to inhibitory cells
-    wEE     = f*.022          #Average weight of excitatory to excitatory cells
+    wEE     = f*.011          #Average weight of excitatory to excitatory cells
     wII     = f*0.042         #Average weight of inhibitory to inhibitory cells
 
 
