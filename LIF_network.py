@@ -171,7 +171,7 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
 
 if __name__ == "__main__":
     weightsEE, weightsEI, weightsIE, weightsII = create_matrices()
-    gids, spike_times = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=200)
+    gids, spike_times = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=20)
     plt.scatter(spike_times, gids)
     plt.show()
     print "done"
