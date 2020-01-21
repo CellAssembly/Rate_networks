@@ -7,12 +7,12 @@ def create_matrices():
     # CREATE WEIGHT MATRIX
     ###############################################################################
 
-    neuronNum = 100
+    neuronNum = 2000
     EneuronNum = 0.8 * neuronNum
     IneuronNum = 0.2 * neuronNum
 
-    WRatio  = 2.0               #Ratio of Win/Wout (synaptic weight of within group to neurons outside of the group)
-    REE = 3.5                   #Ratio of pin/pout (probability of connection withing group to outside the group)
+    WRatio  = 1.0               #Ratio of Win/Wout (synaptic weight of within group to neurons outside of the group)
+    REE = 2.0                   #Ratio of pin/pout (probability of connection withing group to outside the group)
     numClusters = 4
 
     mult = 1

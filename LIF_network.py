@@ -165,13 +165,16 @@ def simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII,tEnd = 1000)
 
 
                 memVol[j,i] = v
-    # plt.imshow(rast)
     return gids, spike_times
 
 
 if __name__ == "__main__":
     weightsEE, weightsEI, weightsIE, weightsII = create_matrices()
-    gids, spike_times = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=20)
-    plt.scatter(spike_times, gids)
+    gids, spike_times = simulate_LIF_network(weightsEE, weightsEI, weightsIE, weightsII, tEnd=500)
+
+    plt.figure()
+    plt.scatter(np.array(spike_times)/10., gids) #Divide by 10 to convert to millisecond
+    plt.xlabel('Time (ms)')
+    plt.ylabel('Neuron Number')
     plt.show()
     print "done"
